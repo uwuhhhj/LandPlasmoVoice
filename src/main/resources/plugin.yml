@@ -1,0 +1,13 @@
+name: LandPlasmoVoice
+version: '1.0.0'
+main: io.github.loliiiico.landPlasmoVoice.LandPlasmoVoice
+api-version: '1.21'
+authors: [ Loliiiico ]
+description: Control Simple Voice Chat speak ability via Lands flags
+depend:
+  - Lands
+  - PlasmoVoice
+permissions:
+  landspeak.bypass:
+    description: Bypass speak flag restrictions everywhere
+    default: op
