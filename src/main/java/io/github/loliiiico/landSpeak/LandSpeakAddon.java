@@ -13,7 +13,8 @@ import su.plo.voice.api.addon.InjectPlasmoVoice;
 import su.plo.voice.api.addon.annotation.Addon;
 import su.plo.voice.api.event.EventPriority;
 import su.plo.voice.api.server.PlasmoVoiceServer;
-import su.plo.voice.api.server.event.audio.source.PlayerSpeakEvent;
+import su.plo.voice.api.server.audio.capture.ServerActivation;
+import su.plo.voice.api.server.event.audio.capture.PlayerServerActivationEvent;
 
 @Addon(
         id = LandPlasmoVoice.VOICE_PLUGIN_ID,
@@ -59,7 +60,7 @@ public final class LandSpeakAddon implements AddonInitializer {
         plugin.getLogger().info("LandSpeak Plasmo Voice addon initialized, registering PlayerSpeakEvent handler");
         voiceServer.getEventBus().register(
                 this,
-                PlayerSpeakEvent.class,
+                PlayerServerActivationEvent.class,
                 EventPriority.NORMAL,
                 this::handlePlayerSpeak
         );
@@ -70,7 +71,7 @@ public final class LandSpeakAddon implements AddonInitializer {
         plugin.getLogger().info("LandSpeak Plasmo Voice addon shut down");
     }
 
-    private void handlePlayerSpeak(PlayerSpeakEvent event) {
+    private void handlePlayerSpeak(PlayerServerActivationEvent event) {
         try {
             UUID uuid = event.getPlayer().getInstance().getUuid();
             if (uuid == null) {
@@ -85,13 +86,14 @@ public final class LandSpeakAddon implements AddonInitializer {
             boolean cacheHit = entry != null && entry.expiry > now;
             if (cacheHit) {
                 if (!entry.allowed) {
-                    event.setCancelled(true);
+                    // Mark this audio packet as handled so default processing is skipped
+                    event.setResult(ServerActivation.Result.HANDLED);
                 }
                 return;
             }
 
-            // No cache yet: pessimistically cancel this packet on the Plasmo thread
-            event.setCancelled(true);
+            // No cache yet: pessimistically mark this packet as handled
+            event.setResult(ServerActivation.Result.HANDLED);
 
             // Only schedule one permission check per player at a time
             if (!pendingChecks.add(uuid)) {
