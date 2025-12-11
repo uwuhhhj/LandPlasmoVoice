@@ -35,7 +35,7 @@ public class LandsHook {
         this.speakFlag = RoleFlag.of(landsApi, FlagTarget.PLAYER, RoleFlagCategory.ACTION, "speak")
                 .setDisplayName("Speak")
                 .setIcon(new ItemStack(Material.NOTE_BLOCK))
-                .setDescription(List.of("§f允许使用 Simple Voice Chat 说话吗？"))
+                .setDescription(List.of("§f允许这个角色使用语音插件说话吗？"))
                 .setDisplay(true);
 
         plugin.getLogger().info("Registered Lands role flag 'speak'.");

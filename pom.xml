@@ -79,10 +79,12 @@
         </dependency>
         <!-- Lands API (provided at runtime). Coordinates may vary across versions. -->
         <dependency>
-          <groupId>su.plo.voice.api</groupId>
-          <artifactId>server</artifactId>
-          <version>2.1.6</version>
-        </dependency> 
+            <groupId>su.plo.voice.api</groupId>
+            <artifactId>server</artifactId>
+            <version>2.1.6</version>
+            <!-- Plasmo Voice 提供于服务端插件，避免被打进本插件 jar 里导致类加载冲突 -->
+            <scope>provided</scope>
+        </dependency>
         <!-- Lands API (provided at runtime). Coordinates may vary across versions. -->
 	    <dependency>
 	        <groupId>com.github.Angeschossen</groupId>
